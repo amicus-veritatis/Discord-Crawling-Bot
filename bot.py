@@ -8,6 +8,7 @@ import twint
 import nest_asyncio
 import itertools
 import pandas as pd
+import dotenv
 nest_asyncio.apply()
 
 pd.set_option('display.max_columns', None)
@@ -25,6 +26,25 @@ bot = commands.Bot(command_prefix="!")
 async def on_ready():
     print("Testing...")
 
+@bot.command(pass_context=True)
+async def help(ctx:object, *keyword):
+    '''
+    !info <keyword> : 크롤링.
+    !on : 킨다.
+    !ping : 봇이 죽었는지 살았는지 확인한다.
+    !TODO : TODO 추가.
+    !help <command> : <command>에 대한 설명
+    !help : 명령어 목록
+    '''
+    embed = discord.Embed(title="Discord crawling bot, AlertBot", description="", color=0x5CD1E5)
+    if keyword is None:
+        embed.add_field(name='!info <keyword>', value='<keyword>에 해당하는 트윗을 약 20개 긁어온다.', inline=False)
+        embed.add_field(name='!on <configure>', value='자동 크롤러를 킨다. 현재 버그 있어서 키면 디스코드 봇 마비되니 사용 X', inline=False)
+        embed.add_field(name='!ping', value='봇 생존 여부 확인', inline=False)
+        embed.add_field(name='!TODO <text>', value='<text>를 TODO에 추가한다. 개발자만 사용 가능. 아직 구현 안 됨', inline=False)
+        embed.add_field(name='!help <command>', value='<command>에 대한 설명을 출력한다. 현재 구현 안 됨', inline=False)
+        embed.add_field(name='!help', value='모든 명령어를 출력한다.', inline=False)
+    await ctx.send(embed=embed)
 
 @bot.command(pass_context=True)
 async def info(ctx: object, *keyword: str):
@@ -98,4 +118,4 @@ async def cyclecrawl(ctx):
 
 
 if __name__ == "__main__":
-    bot.run('botToken')
+    bot.run('ODc5NDk0MTM5MDAyMTI2NDA2.YSQivg.khDr7Ulvu2PYKvB0-nLW10jh7gg')
