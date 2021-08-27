@@ -19,12 +19,13 @@ pd.set_option('display.max_rows', None)
 crawl = TWcfg()
 tCrawl = TWcfg()
 crawlPeriod = 3
-bot = commands.Bot(command_prefix="!")
+bot = commands.Bot(command_prefix="!", help_command=None)
 
 
 @bot.event
 async def on_ready():
     print("Testing...")
+
 
 @bot.command(pass_context=True)
 async def help(ctx:object, *keyword):
@@ -37,7 +38,9 @@ async def help(ctx:object, *keyword):
     !help : 명령어 목록
     '''
     embed = discord.Embed(title="Discord crawling bot, AlertBot", description="", color=0x5CD1E5)
-    if keyword is None:
+    if keyword == "TODO":
+        embed.add_field(name='!TODO <text', value='아직 구현 안 됨', inline=False)
+    else:
         embed.add_field(name='!info <keyword>', value='<keyword>에 해당하는 트윗을 약 20개 긁어온다.', inline=False)
         embed.add_field(name='!on <configure>', value='자동 크롤러를 킨다. 현재 버그 있어서 키면 디스코드 봇 마비되니 사용 X', inline=False)
         embed.add_field(name='!ping', value='봇 생존 여부 확인', inline=False)
@@ -45,6 +48,7 @@ async def help(ctx:object, *keyword):
         embed.add_field(name='!help <command>', value='<command>에 대한 설명을 출력한다. 현재 구현 안 됨', inline=False)
         embed.add_field(name='!help', value='모든 명령어를 출력한다.', inline=False)
     await ctx.send(embed=embed)
+
 
 @bot.command(pass_context=True)
 async def info(ctx: object, *keyword: str):
