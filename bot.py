@@ -72,14 +72,7 @@ async def info(ctx: object, *keyword: str):
     text = 'Result:'
     ### embed = discord.Embed(title="Result", description="",color=0x5CD1E5)
     for i, (key, val) in enumerate(ret.items(), start=1):
-        if i % 5 == 0:
-            text = '\n'.join([text, f'{key}: {val}'])
-            await ctx.send(text)
-            text = '-----------------'
-            continue
-        else:
-            text = '\n'.join([text,f'{key}: {val}'])
-    await ctx.send(text)
+        await ctx.send(f'{key}: {val}')
     ### await ctx.send(embed=embed)
 
 
@@ -89,27 +82,16 @@ async def ping(ctx):
 
 @bot.command(pass_context=True)
 async def geo(ctx, lng, lat, rat):
-    if lng is None or lat is None or rat is None:
-        await ctx.send("특정 키워드가 누락되었습니다. 해당 명령어의 자세한 이용법은 다음 help 키워드를 참고하십시오.")
-        await ctx.send("!help geo")
-    else:
-        embed = discord.Embed(title="", description="", color=0x5CD1E5)
-        embed.add_field(name='Geolocation', value=f'{lng}, {lat}', inline=False)
-        embed.add_field(name='Distance', value=f'{rat}', inline=False)
-        await ctx.send(embed=embed)
-        result = crawl.geo(lng, lat, rat)
-        ret = result['link'].to_dict()
-        text = 'Result:'
-        ### embed = discord.Embed(title="Result", description="",color=0x5CD1E5)
-        for i, (key, val) in enumerate(ret.items(), start=1):
-            if i % 5 == 0:
-                text = '\n'.join([text, f'{key}: {val}'])
-                await ctx.send(text)
-                text = '-----------------'
-                continue
-            else:
-                text = '\n'.join([text,f'{key}: {val}'])
-        await ctx.send(text)
+    embed = discord.Embed(title="", description="", color=0x5CD1E5)
+    embed.add_field(name='Geolocation', value=f'{lng}, {lat}', inline=False)
+    embed.add_field(name='Distance', value=f'{rat}', inline=False)
+    await ctx.send(embed=embed)
+    result = crawl.geo(lng, lat, rat)
+    ret = result['link'].to_dict()
+    text = 'Result:'
+    ### embed = discord.Embed(title="Result", description="",color=0x5CD1E5)
+    for i, (key, val) in enumerate(ret.items(), start=1):
+        await ctx.send(f'{key}: {val}')
 
 @bot.command(pass_context=True)
 async def cfg(ctx, cfgobj, *cfgval):
