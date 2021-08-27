@@ -28,7 +28,7 @@ async def on_ready():
 
 
 @bot.command(pass_context=True)
-async def help(ctx:object, *keyword):
+async def help(ctx:object, *keyword: str):
     '''
     !info <keyword> : 크롤링.
     !on : 킨다.
@@ -36,10 +36,15 @@ async def help(ctx:object, *keyword):
     !TODO : TODO 추가.
     !help <command> : <command>에 대한 설명
     !help : 명령어 목록
+    !geo <longtitude> <latitude> <radius> : 위치를 기준으로 트윗을 검색합니다.
     '''
+    keyword = ' '.join(keyword)
+    print(keyword)
     embed = discord.Embed(title="Discord crawling bot, AlertBot", description="", color=0x5CD1E5)
     if keyword == "TODO":
-        embed.add_field(name='!TODO <text', value='아직 구현 안 됨', inline=False)
+        embed.add_field(name='!TODO <text>', value='아직 구현 안 됨', inline=False)
+    elif keyword == "geo" or keyword == "GEO" or keyword == "Geo":
+        embed.add_field(name='!geo <longtitude> <latitude> <radius>', value='위치를 기준으로 트윗을 검색합니다.', inline=False)
     else:
         embed.add_field(name='!info <keyword>', value='<keyword>에 해당하는 트윗을 약 20개 긁어온다.', inline=False)
         embed.add_field(name='!on <configure>', value='자동 크롤러를 킨다. 현재 버그 있어서 키면 디스코드 봇 마비되니 사용 X', inline=False)
@@ -47,6 +52,7 @@ async def help(ctx:object, *keyword):
         embed.add_field(name='!TODO <text>', value='<text>를 TODO에 추가한다. 개발자만 사용 가능. 아직 구현 안 됨', inline=False)
         embed.add_field(name='!help <command>', value='<command>에 대한 설명을 출력한다. 현재 구현 안 됨', inline=False)
         embed.add_field(name='!help', value='모든 명령어를 출력한다.', inline=False)
+        embed.add_field(name='!geo <longtitude> <latitude> <radius>', value='위치를 기준으로 트윗을 검색합니다.', inline=False)
     await ctx.send(embed=embed)
 
 
@@ -81,6 +87,25 @@ async def info(ctx: object, *keyword: str):
 async def ping(ctx):
     await ctx.send("pong")
 
+@bot.command(pass_context=True)
+async def geo(ctx, lng, lat, rat):
+    embed = discord.Embed(title="", description="", color=0x5CD1E5)
+    embed.add_field(name='Geolocation', value=f'{lng}, {lat}', inline=False)
+    embed.add_field(name='Distance', value=f'{rat}', inline=False)
+    await ctx.send(embed=embed)
+    result = crawl.geo(lng, lat, rat)
+    ret = result['link'].to_dict()
+    text = 'Result:'
+    ### embed = discord.Embed(title="Result", description="",color=0x5CD1E5)
+    for i, (key, val) in enumerate(ret.items(), start=1):
+        if i % 5 == 0:
+            text = '\n'.join([text, f'{key}: {val}'])
+            await ctx.send(text)
+            text = '-----------------'
+            continue
+        else:
+            text = '\n'.join([text,f'{key}: {val}'])
+    await ctx.send(text)
 
 @bot.command(pass_context=True)
 async def cfg(ctx, cfgobj, *cfgval):

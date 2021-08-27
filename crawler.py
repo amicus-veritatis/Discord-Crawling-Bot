@@ -74,6 +74,13 @@ class TWcfg(twint.Config):
         result = twdf(twint.storage.panda.Tweets_df)
         return result
 
+    def geo(self, glong, glat, radius):
+        Geo = ",".join([str(glong), str(glat), str(radius)])
+        self.Geo = Geo
+        twint.run.Search(self)
+        result = twdf(twint.storage.panda.Tweets_df)
+        return result
+
 
 if __name__ == "__main__":
     pandas.set_option('display.max_columns', None)
