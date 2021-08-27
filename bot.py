@@ -98,4 +98,4 @@ async def cyclecrawl(ctx):
 
 
 if __name__ == "__main__":
-    bot.run('ODc5NDk0MTM5MDAyMTI2NDA2.YSQivg.khDr7Ulvu2PYKvB0-nLW10jh7gg')
+    bot.run('botToken')
