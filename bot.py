@@ -9,7 +9,11 @@ import nest_asyncio
 import itertools
 import pandas as pd
 import dotenv
+import jdatetime
 nest_asyncio.apply()
+
+dotenv.load_dotenv(verbose=True)
+BOT_TOKEN = os.getenv('BOT_TOKEN')
 
 pd.set_option('display.max_columns', None)
 pd.set_option('display.width', None)
@@ -53,6 +57,9 @@ async def help(ctx:object, *keyword: str):
         embed.add_field(name='!help <command>', value='<command>에 대한 설명을 출력한다. 현재 구현 안 됨', inline=False)
         embed.add_field(name='!help', value='모든 명령어를 출력한다.', inline=False)
         embed.add_field(name='!geo <longtitude> <latitude> <radius>', value='위치를 기준으로 트윗을 검색합니다.', inline=False)
+        embed.add_field(name='!date <year>/<month>/<day>', value='이란력을 그레고리력으로 변환합니다.', inline=False)
+        embed.add_field(name='!date now', value='현재 날짜를 이란력으로 출력합니다.', inline=False)
+        embed.add_field(name='!fromGregorian <year>/<month>/<day>', value='그레고리력을 이란력으로 변환합니다.', inline=False)
     await ctx.send(embed=embed)
 
 
@@ -94,6 +101,19 @@ async def geo(ctx, lng, lat, rat):
         await ctx.send(f'{key}: {val}')
 
 @bot.command(pass_context=True)
+async def date(ctx, str):
+    if str == "now":
+        await ctx.send(f'오늘은 이란력으로 {jdatetime.datetime.now().strftime("%Y년 %m월 %d일")}입니다.')
+    else:
+        jDate = str.split("/")
+        await ctx.send(f'{jdatetime.date(int(jDate[0]),int(jDate[1]),int(jDate[2])).togregorian().strftime("%Y/%m/%d")}')
+
+@bot.command(pass_context=True)
+async def fromGregorian(ctx, str):
+    jDate = str.split("/")
+    await ctx.send(f'{jdatetime.date.fromgregorian(year=int(jDate[0]),month=int(jDate[1]),day=int(jDate[2])).strftime("%Y/%m/%d")}')
+
+@bot.command(pass_context=True)
 async def cfg(ctx, cfgobj, *cfgval):
     cfgval = ' '.join(cfgval)
     #tCrawl.cfg(cfgobj=cfgval)
@@ -133,4 +153,4 @@ async def cyclecrawl(ctx):
 
 
 if __name__ == "__main__":
-    bot.run('ODc5NDk0MTM5MDAyMTI2NDA2.YSQivg.khDr7Ulvu2PYKvB0-nLW10jh7gg')
+    bot.run(BOT_TOKEN)

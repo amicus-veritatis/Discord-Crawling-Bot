@@ -48,7 +48,7 @@ class TempClass(str):
 
 class TWcfg(twint.Config):
     def __init__(self):
-        self.Limit = 10
+        self.Limit = 100
         self.Pandas = True
 
     def cfg(self, **kwargs):
