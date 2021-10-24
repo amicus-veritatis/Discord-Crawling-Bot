@@ -124,7 +124,7 @@ async def cfg(ctx, cfgobj, *cfgval):
 def proccfg(cfgobj, cfgval):
     global crawlPeriod
     if cfgobj == "limit":
-        val = int(cfgval) // 5
+        val = int(cfgval) 
         tCrawl.cfg(Limit=val)
     if cfgobj == "period":
         print(f'{str(int(cfgval))}')
